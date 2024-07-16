@@ -1,5 +1,10 @@
 #Custom
-templates.py
+letter/templates.py
+user_data/
+tests/
+None/
+*.session
+posts.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

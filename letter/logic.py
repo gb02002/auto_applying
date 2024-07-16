@@ -1,4 +1,4 @@
-import texts
+import letter.texts as texts
 
 
 def start_logic(type_of_company: int, language: int) -> str:
