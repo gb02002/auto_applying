@@ -1,5 +1,5 @@
 import re
-import templates
+import letter.templates as templates
 
 
 def fill_empty_spaces(template):
