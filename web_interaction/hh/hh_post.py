@@ -18,24 +18,31 @@ def try_to_apply(driver, curr_post_link, our_letter, original_window) -> bool:
     # тут надо обработать "уже откликнулся"
     try:
         apply = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CLASS_NAME, 'bloko-button_kind-success')))
+            EC.presence_of_element_located((By.CLASS_NAME, "bloko-button_kind-success"))
+        )
         apply.click()
 
         letter_trig = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-qa='vacancy-response-letter-toggle']"))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "button[data-qa='vacancy-response-letter-toggle']")
+            )
         )
         letter_trig.click()
 
         time.sleep(1)
 
         letter_textarea = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, "//textarea[contains(@placeholder, 'Напишите, почему')]"))
+            EC.presence_of_element_located(
+                (By.XPATH, "//textarea[contains(@placeholder, 'Напишите, почему')]")
+            )
         )
         letter_textarea.send_keys(our_letter)
         time.sleep(1)
 
         submit_button = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.CSS_SELECTOR, "button[data-qa='vacancy-response-letter-submit']"))
+            EC.presence_of_element_located(
+                (By.CSS_SELECTOR, "button[data-qa='vacancy-response-letter-submit']")
+            )
         )
         submit_button.click()
 
@@ -44,23 +51,32 @@ def try_to_apply(driver, curr_post_link, our_letter, original_window) -> bool:
     except TimeoutException:
         """Если не прямой аплай"""
         textarea = WebDriverWait(driver, 5).until(
-            EC.presence_of_element_located((By.XPATH, "//textarea[@data-qa='vacancy-response-popup-form-letter-input']"))
+            EC.presence_of_element_located(
+                (
+                    By.XPATH,
+                    "//textarea[@data-qa='vacancy-response-popup-form-letter-input']",
+                )
+            )
         )
         textarea.send_keys(our_letter)
 
         response_button = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, "//button[span[text()='Откликнуться']]"))
+            EC.presence_of_element_located(
+                (By.XPATH, "//button[span[text()='Откликнуться']]")
+            )
         )
         response_button.click()
         # submit_button(driver=driver)
 
-        if len(driver.find_elements(By.CLASS_NAME, '-form-')) != 2:
-            check = input("Check if everything is correct, we doubt if form was submitted.\nIf you want not to finish test, press `l`, and we will write down this post link and your letter in txt file for you.\n")
-            if check == 'l':
+        if len(driver.find_elements(By.CLASS_NAME, "-form-")) != 2:
+            check = input(
+                "Check if everything is correct, we doubt if form was submitted.\nIf you want not to finish test, press `l`, and we will write down this post link and your letter in txt file for you.\n"
+            )
+            if check == "l":
                 write_to_our_file(curr_post_link, our_letter)
             return True
     except NoSuchElementException:
-        input('No element found. Idk what to do. Go debug.')
+        input("No element found. Idk what to do. Go debug.")
         return True
     finally:
         if original_window in driver.window_handles:
@@ -72,7 +88,11 @@ def try_to_apply(driver, curr_post_link, our_letter, original_window) -> bool:
 def post_logic(driver: WebDriver, original_window, curr_post_link: str) -> bool:
     """Handelds logic inside the post tab"""
     try:
-        preparation(driver=driver, curr_post_link=curr_post_link, original_window=original_window)
+        preparation(
+            driver=driver,
+            curr_post_link=curr_post_link,
+            original_window=original_window,
+        )
 
         # if not input("`Enter` to skip, any other chars to apply\n"):
         # #  Коменты для ответа на всё
@@ -85,8 +105,12 @@ def post_logic(driver: WebDriver, original_window, curr_post_link: str) -> bool:
         # our_letter = entrypoint_letter.main()
 
         try:
-            res = try_to_apply(driver=driver, curr_post_link=curr_post_link, our_letter=our_letter,
-                               original_window=original_window)
+            res = try_to_apply(
+                driver=driver,
+                curr_post_link=curr_post_link,
+                our_letter=our_letter,
+                original_window=original_window,
+            )
             if res:
                 return True
         except Exception as e:
@@ -107,12 +131,14 @@ def ready_to_use(driver: WebDriver, original_window):
     number_of_posts = 0
     time.sleep(2)
 
-    elements = driver.find_elements(By.CLASS_NAME, 'bloko-header-section-2')
+    elements = driver.find_elements(By.CLASS_NAME, "bloko-header-section-2")
     while is_any_left:
         for element in elements:
             link = element.find_element(By.TAG_NAME, "a").get_attribute("href")
 
-            res = post_logic(driver=driver, curr_post_link=link, original_window=original_window)
+            res = post_logic(
+                driver=driver, curr_post_link=link, original_window=original_window
+            )
 
             if res:
                 number_of_posts += 1
@@ -149,7 +175,7 @@ def preparation(driver, original_window, curr_post_link):
 
 
 def write_to_our_file(curr_post_link, our_letter):
-    with open(TXT_FILE, 'a', encoding='utf-8') as file:
+    with open(TXT_FILE, "a", encoding="utf-8") as file:
         file.write(f"Link: {curr_post_link}\n")
         file.write(f"Letter: {our_letter}\n")
         file.write("-" * 40 + "\n")  # Разделитель для читаемости
@@ -157,7 +183,9 @@ def write_to_our_file(curr_post_link, our_letter):
 
 def submit_button(driver: WebDriver):
     try:
-        submit_response = driver.find_element(By.XPATH, "//button[data-qa='vacancy-response-submit-popup']")
+        submit_response = driver.find_element(
+            By.XPATH, "//button[data-qa='vacancy-response-submit-popup']"
+        )
         print("Found vacancy-response-submit-popup")
     except NoSuchElementException:
         submit_response = None
@@ -166,7 +194,9 @@ def submit_button(driver: WebDriver):
     # Если первый элемент не найден, пытаемся найти второй элемент
     if submit_response is None:
         try:
-            submit_response = driver.find_element(By.XPATH, "//button[data-qa='vacancy-response-popup-close-button'")
+            submit_response = driver.find_element(
+                By.XPATH, "//button[data-qa='vacancy-response-popup-close-button'"
+            )
             print("Found vacancy-response-popup-close-button")
         except NoSuchElementException:
             submit_response = None
@@ -178,6 +208,7 @@ def submit_button(driver: WebDriver):
         print("Submit button clicked")
     else:
         print("No submit button found")
+
 
 # Вариант когда не найдет textarea. Я не помню, что это за случай
 #
@@ -199,11 +230,8 @@ def submit_button(driver: WebDriver):
 #                                   '4]/div/div/div[4]/div/div[1]/div/div/div[10]/form/div/button').click()
 
 
-
 # <button class="bloko-button bloko-button_kind-primary"
 # type="submit" data-qa="vacancy-response-letter-submit"><span>Отправить</span></button>
-
-
 
 
 # def try_to_apply(driver, curr_post_link, our_letter, original_window) -> bool:

@@ -68,12 +68,16 @@ stack = {
         else fill_empty_spaces(templates.stack_parser_rus)
     ),
     4: lambda x: (
-        fill_empty_spaces(templates.stack_elt_eng) if x == 1 else fill_empty_spaces(templates.stack_elt_rus)
+        fill_empty_spaces(templates.stack_elt_eng)
+        if x == 1
+        else fill_empty_spaces(templates.stack_elt_rus)
     ),
 }
 
 patterns = lambda x: (
-    fill_empty_spaces(templates.patterns_eng) if x == 1 else fill_empty_spaces(templates.patterns_rus)
+    fill_empty_spaces(templates.patterns_eng)
+    if x == 1
+    else fill_empty_spaces(templates.patterns_rus)
 )
 
 end = lambda x: templates.ending_eng if x == 1 else templates.ending_rus

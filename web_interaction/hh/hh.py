@@ -17,7 +17,9 @@ def hh_entrypoint() -> bool:
         wait = establish_connection(driver=driver)
         original_window = driver.current_window_handle
 
-        input("Are you satisfied with the search?\nIf not change filters or query in browser\nPress `Enter` to commit\n")
+        input(
+            "Are you satisfied with the search?\nIf not change filters or query in browser\nPress `Enter` to commit\n"
+        )
         original_link = driver.current_url
 
         go(driver, original_window, original_link, wait)
@@ -62,13 +64,13 @@ def get_flipped_link(link):
     query_params = parse_qs(url_parts.query)
 
     # Проверяем, есть ли параметр страницы в URL
-    if 'page' in query_params:
+    if "page" in query_params:
         # Увеличиваем номер страницы на 1
-        current_page = int(query_params['page'][0])
-        query_params['page'] = str(current_page + 1)
+        current_page = int(query_params["page"][0])
+        query_params["page"] = str(current_page + 1)
     else:
         # Если параметра страницы нет, добавляем его с начальным значением 1
-        query_params['page'] = '1'
+        query_params["page"] = "1"
 
     # Собираем новый URL
     new_query = urlencode(query_params, doseq=True)
