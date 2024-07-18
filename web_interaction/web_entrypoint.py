@@ -19,7 +19,7 @@ def main(web_type: int = 2) -> None:
             case 3:
                 linkedIn.linkedin_entrypoint()
             case _:
-                print('None')
+                print("None")
     except KeyboardInterrupt:
         if hh.DRIVER:
             print(f"У нас есть драйвер")
@@ -27,5 +27,5 @@ def main(web_type: int = 2) -> None:
         print(f"Вы прервали выполнение.\nМы откликнулись на {hh.TOTAL_COUNT} вакансий.")
 
 
-if __name__ == 'main':
+if __name__ == "main":
     main()

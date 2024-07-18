@@ -15,7 +15,11 @@ def setUp() -> WebDriver | None:
     """Setting up driver with headers"""
     try:
         options = set_options(browser="Chrome")
-        driver = uc.Chrome(options=options, driver_executable_path=DRIVER_PATH, browser_executable_path=CHROME_PATH)
+        driver = uc.Chrome(
+            options=options,
+            driver_executable_path=DRIVER_PATH,
+            browser_executable_path=CHROME_PATH,
+        )
         driver.maximize_window()
 
         return driver
@@ -27,8 +31,9 @@ def setUp() -> WebDriver | None:
         return None
 
 
-def set_options(browser: str = 'Chrome') -> (
-        webdriver.ChromeOptions | webdriver.SafariOptions | webdriver.FirefoxOptions):
+def set_options(
+    browser: str = "Chrome",
+) -> webdriver.ChromeOptions | webdriver.SafariOptions | webdriver.FirefoxOptions:
     """Sets options for your driver"""
     try:
         match browser:
@@ -57,8 +62,11 @@ def establish_connection(driver: WebDriver) -> WebDriverWait:
 
     driver.get(PARSING_PATH)
 
-    WebDriverWait(driver, 10).until(EC.presence_of_element_located(
-        (By.XPATH, '//*[@id="a11y-main-content"]/div[2]/div/div/div/h2/span/a')))
+    WebDriverWait(driver, 10).until(
+        EC.presence_of_element_located(
+            (By.XPATH, '//*[@id="a11y-main-content"]/div[2]/div/div/div/h2/span/a')
+        )
+    )
 
     return wait
 
